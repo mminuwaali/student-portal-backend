@@ -9,4 +9,5 @@ urlpatterns = [
     path("", include(router.urls)),
     path("user/", views.UserView.as_view()),
     path("login/", TokenObtainPairView.as_view()),
+    path("change-password/", views.ChangePasswordView.as_view()),
 ]
