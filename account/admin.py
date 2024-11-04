@@ -9,7 +9,10 @@ class UserAdmin(BaseUserAdmin):
     fieldsets = [
         (_("Basic Info"), {"fields": ["email", "username", "password"]}),
         (_("Important Dates"), {"fields": ["last_login", "date_joined"]}),
-        (_("Additonal Info"), {"fields": ["profile", "first_name", "last_name"]}),
+        (
+            _("Additonal Info"),
+            {"fields": ["profile", "first_name", "last_name", "phone_number"]},
+        ),
         (
             _("Permissions"),
             {
