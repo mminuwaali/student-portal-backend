@@ -33,7 +33,7 @@ class AcademicHistory(models.Model):
     class Meta:
         ordering = ["-academic_year"]
         verbose_name_plural = "Academic histories"
-        unique_together = ["academic_year", "academic_year"]
+        unique_together = ["academic_year", "academic_profile"]
 
     def __str__(self):
         return f"{self.academic_profile.student} - {self.academic_year} ({self.level})"
