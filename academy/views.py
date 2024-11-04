@@ -39,9 +39,10 @@ class RegistrationPeriodViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = serializers.RegistrationPeriodSerializer
 
     def get_queryset(self):
-        now = timezone.now
+        now = timezone.now()
         queryset = super().get_queryset()
 
+        # return queryset
         return queryset.filter(start_date__lte=now, end_date__gte=now)
 
 

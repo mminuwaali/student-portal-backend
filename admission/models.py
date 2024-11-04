@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth import get_user_model
-from academy.models import Course, Semester, AcademicYear
 from django.core.validators import MaxValueValidator as Max
+from academy.models import Level, Course, Semester, AcademicYear
 
 User = get_user_model()
 
@@ -33,8 +33,8 @@ class Payment(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     reference = models.CharField(max_length=100, unique=True)
     amount = models.DecimalField(max_digits=10, decimal_places=2)
-    academic_year = models.ForeignKey(AcademicYear, models.CASCADE)
     registration = models.OneToOneField("StudentRegistration", models.CASCADE)
+    academic_year = models.ForeignKey(AcademicYear, models.CASCADE, editable=False)
     status = models.CharField(
         max_length=20, choices=PAYMENT_STATUS_CHOICES, default="PENDING"
     )
@@ -42,13 +42,21 @@ class Payment(models.Model):
     def __str__(self):
         return f"{self.student.username} - {self.reference}"
 
+    def save(self, *args, **kwargs):
+        self.academic_year = self.registration.academic_year
+        super().save(*args, **kwargs)
+
 
 class StudentRegistration(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
+    level = models.ForeignKey(Level, models.CASCADE)
     student = models.ForeignKey(User, models.CASCADE)
     is_completed = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     academic_year = models.ForeignKey(AcademicYear, models.CASCADE)
+
+    def __str__(self):
+        return f"{self.student.username} - {self.academic_year.name}"
 
     def save(self, *args, **kwargs):
         self.create_registered_semesters()
@@ -58,7 +66,14 @@ class StudentRegistration(models.Model):
     def calculate_gpa(self):
         semesters = self.academic_year.semester_set.all()
 
-        return sum([i.cgpa for i in RegisteredSemester.objects.filter(student=self.student, semester__in=semesters)])
+        return sum(
+            [
+                i.cgpa
+                for i in RegisteredSemester.objects.filter(
+                    student=self.student, semester__in=semesters
+                )
+            ]
+        )
 
     def create_registered_semesters(self):
         semesters = self.academic_year.semester_set.all()
@@ -71,13 +86,16 @@ class StudentRegistration(models.Model):
         unique_together = ["student", "academic_year"]
 
     def __str__(self):
-        return f"{self.student.username} - {self.academic_year.name}"
+        return f"{self.student} - {self.academic_year.name}"
 
 
 class RegisteredSemester(models.Model):
     student = models.ForeignKey(User, models.CASCADE)
     semester = models.ForeignKey(Semester, models.CASCADE)
     courses = models.ManyToManyField(Course, through="RegisteredCourse", blank=True)
+
+    def __str__(self):
+        return f"{self.student} - {self.semester.name}  - {self.semester.academic_year}"
 
     @property
     def gpa(self):
@@ -116,6 +134,9 @@ class RegisteredCourse(models.Model):
     score = models.DecimalField(
         default=0, max_digits=5, decimal_places=2, validators=[Max(100.0)]
     )
+
+    def __str__(self):
+        return f"{self.course.code} - {self.semester.student}"
 
     @property
     def weighted_score(self):

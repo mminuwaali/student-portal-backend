@@ -9,10 +9,10 @@ class AcademicProfile(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     created_at = models.DateTimeField(auto_now_add=True)
     student = models.OneToOneField(User, models.CASCADE)
-    department = models.ForeignKey(Department, models.PROTECT)
-    faculty = models.ForeignKey(Faculty, models.PROTECT, editable=False)
+    department = models.ForeignKey(Department, models.CASCADE)
+    faculty = models.ForeignKey(Faculty, models.CASCADE, editable=False)
     current_academy = models.OneToOneField(
-        "AcademicHistory", models.PROTECT, null=True, blank=True
+        "AcademicHistory", models.CASCADE, null=True, blank=True
     )
 
     def save(self, *args, **kwargs):

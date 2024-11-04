@@ -10,7 +10,7 @@ class NextOfKinViewSet(viewsets.ModelViewSet):
         return models.NextOfKin.objects.filter(student=self.request.user)
 
 
-class RegisteredCourseViewSet(viewsets.ReadOnlyModelViewSet):
+class RegisteredCourseViewSet(viewsets.ModelViewSet):
     queryset = models.RegisteredCourse.objects.all()
     serializer_class = serializers.RegisteredCourseSerializer
 

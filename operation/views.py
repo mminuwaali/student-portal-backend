@@ -18,6 +18,8 @@ class TimeTableViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         queryset = super().get_queryset()
+
+        return queryset
         current_date = timezone.now().date()
         current_weekday = timezone.now().weekday()
 

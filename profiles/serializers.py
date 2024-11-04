@@ -1,11 +1,11 @@
 from . import models
 from rest_framework import serializers
-from academy.serializers import LevelSerializer
+from academy.serializers import LevelSerializer,AcademicYearSerializer
 
 
 class AcademicHistorySerializer(serializers.ModelSerializer):
     level = LevelSerializer(read_only=True)
-    academic_year = serializers.CharField(source="academic_year.name")
+    academic_year = AcademicYearSerializer(read_only=True)
 
     class Meta:
         exclude = ["academic_profile"]

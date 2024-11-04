@@ -36,6 +36,7 @@ class AcademicYearSerializer(serializers.ModelSerializer):
 
 
 class RegistrationPeriodSerializer(serializers.ModelSerializer):
+    academic_year = AcademicYearSerializer(read_only=True)
     class Meta:
         exclude = []
         model = models.RegistrationPeriod

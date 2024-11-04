@@ -38,6 +38,7 @@ class Course(models.Model):
     lecturer = models.ForeignKey(User, models.PROTECT)
     created_at = models.DateTimeField(auto_now_add=True)
     name = models.CharField(max_length=255, unique=True)
+    code = models.CharField(max_length=255, blank=True,null=True)
 
     class Meta:
         ordering = ["name"]
@@ -75,6 +76,7 @@ class AcademicYear(models.Model):
 class RegistrationPeriod(models.Model):
     end_date = models.DateField()
     start_date = models.DateField()
+    description = models.TextField(default="")
     updated_at = models.DateTimeField(auto_now=True)
     created_at = models.DateTimeField(auto_now_add=True)
     name = models.CharField(max_length=255, unique=True)

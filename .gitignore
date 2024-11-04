@@ -1,4 +1,5 @@
 .env/
 media/
 static/
+project/.env
 project/db.sqlite3

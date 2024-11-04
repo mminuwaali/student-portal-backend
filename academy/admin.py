@@ -47,7 +47,6 @@ class AcademicYearAdmin(admin.ModelAdmin):
 
 @admin.register(models.RegistrationPeriod)
 class RegistrationPeriodAdmin(admin.ModelAdmin):
-    search_fields = ["name"]
     list_filter = ["academic_year"]
     list_display = ["name", "academic_year", "start_date", "end_date"]
 
